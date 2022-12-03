@@ -2,7 +2,6 @@ import type { ApplicationCommandType, ChatInputCommandInteraction } from 'discor
 import { Node } from 'lavaclient';
 import { singleton, inject } from 'tsyringe';
 import { kManager, kQueue } from '../../tokens.js';
-import { create } from '#functions/create.js';
 import type { Command } from '#struct/Command';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { QueueMap } from '#struct/Queue.js';
