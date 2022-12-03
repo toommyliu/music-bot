@@ -5,5 +5,11 @@ import type { PlayerInfo } from './play.js';
 
 export function create(guildId: string, playerInfo: PlayerInfo) {
 	const queues = container.resolve<QueueMap>(kQueue);
-	return queues.get(guildId) ?? new Queue(guildId, playerInfo.textChannelId, playerInfo.voiceChannelId);
+	const queue = queues.get(guildId) ?? new Queue(guildId, playerInfo.textChannelId, playerInfo.voiceChannelId);
+
+	if (!queues.has(guildId)) {
+		queues.set(guildId, queue);
+	}
+
+	return queue;
 }
