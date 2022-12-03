@@ -34,9 +34,12 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			return;
 		}
 
-		player.disconnect();
-		await player.destroy();
+		if (player.paused) {
+			await interaction.editReply({ content: 'Already paused.' });
+			return;
+		}
 
-		await interaction.editReply({ content: 'Successfully cleaned up.' });
+		await player.pause(true);
+		await interaction.editReply({ content: 'Paused music playback.' });
 	}
 }

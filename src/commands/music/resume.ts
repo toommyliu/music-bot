@@ -24,7 +24,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 		}
 
 		const player = this.node.players.get(interaction.guildId);
-		if (!player?.playing) {
+		if (!player) {
 			await interaction.editReply({ content: 'Not playing anything.' });
 			return;
 		}
@@ -34,9 +34,12 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			return;
 		}
 
-		player.disconnect();
-		await player.destroy();
+		if (player?.playing && !player.paused) {
+			await interaction.editReply({ content: 'Currently playing music.' });
+			return;
+		}
 
-		await interaction.editReply({ content: 'Successfully cleaned up.' });
+		await player.pause(false);
+		await interaction.editReply({ content: 'Resumed music playback.' });
 	}
 }
