@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import process from 'node:process';
 import { URL, fileURLToPath } from 'node:url';
-import { Client, GatewayIntentBits, type ClientEvents } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import { Node } from 'lavaclient';
 import readdirp from 'readdirp';
 import { container, type InjectionToken } from 'tsyringe';
@@ -60,9 +60,9 @@ void (async () => {
 			continue;
 		}
 
-		const name = event.name ?? (eventInfo_.name as keyof ClientEvents);
-		// @ts-expect-error #2772
-		client.on(name, (...args) => event.handle(...args));
+		const name = event.name ?? eventInfo_.name;
+		void event.handle();
+
 		logger.info(`Registered event: ${name}`);
 	}
 
