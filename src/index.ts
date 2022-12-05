@@ -14,12 +14,15 @@ import { logger } from '#util/logger.js';
 const client = new Client({
 	intents: GatewayIntentBits.Guilds | GatewayIntentBits.GuildVoiceStates,
 });
+
+console.log(process.env.LAVALINK_PORT);
+
 const commands = new Map<string, Command>();
 const manager = new Node({
 	connection: {
-		host: 'krn.2d.gay',
+		host: process.env.LAVALINK_HOST!,
 		port: 443,
-		password: 'AWP)JQ$Gv9}dm.u',
+		password: process.env.LAVALINK_PASSWORD!,
 		secure: true,
 	},
 	sendGatewayPayload: (id, payload) => client.guilds.cache.get(id)?.shard?.send(payload),
@@ -72,3 +75,9 @@ void (async () => {
 
 	await client.login(process.env.DISCORD_TOKEN);
 })();
+
+declare module 'lavaclient' {
+	type Track = {
+		requestedBy: string;
+	};
+}
