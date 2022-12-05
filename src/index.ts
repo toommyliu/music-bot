@@ -15,8 +15,6 @@ const client = new Client({
 	intents: GatewayIntentBits.Guilds | GatewayIntentBits.GuildVoiceStates,
 });
 
-console.log(process.env.LAVALINK_PORT);
-
 const commands = new Map<string, Command>();
 const manager = new Node({
 	connection: {
