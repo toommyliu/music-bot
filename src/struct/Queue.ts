@@ -1,11 +1,11 @@
-import type { TrackInfo } from '@lavaclient/types/v3';
-import type { Node, Player } from 'lavaclient';
+import type { Track as Track_ } from '@lavaclient/types/v3';
+import type { Node } from 'lavaclient';
 import { container } from 'tsyringe';
 import { kManager } from '../tokens.js';
 
 // https://github.com/lavaclient/plugins/blob/master/packages/queue/src/lib/Queue.ts
 export class Queue {
-	public tracks: TrackInfo[];
+	public tracks: Track[];
 
 	public guildId: string;
 
@@ -26,5 +26,6 @@ export class Queue {
 	}
 }
 
-export type Addable = TrackInfo | string;
+export type Track = Track_ & { requestedBy: string };
+export type Addable = Track | string;
 export type QueueMap = Map<string, Queue>;

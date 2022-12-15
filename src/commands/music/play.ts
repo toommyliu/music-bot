@@ -1,8 +1,11 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { LoadType } from '@lavaclient/types/rest/v3/';
 import type { ApplicationCommandType, ChatInputCommandInteraction } from 'discord.js';
 import { Node } from 'lavaclient';
 import { injectable, inject } from 'tsyringe';
 import { kManager } from '../../tokens.js';
 import { create } from '#functions/create.js';
+import { play } from '#functions/play.js';
 import type { Command } from '#struct/Command';
 
 @injectable()
@@ -22,15 +25,40 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 
 		const query = interaction.options.getString('query', true);
 
-		const player = this.node.players.get(interaction.guildId) ?? this.node.createPlayer(interaction.guildId);
 		const res = await this.node.rest.loadTracks(/^https?:\/\//.test(query) ? query : `ytsearch:${query}`);
 
 		const queue = create(guildId, { textChannelId: channelId, voiceChannelId: voice.channelId! });
-		const track = res.tracks[0]!;
+		const requestedBy = { requestedBy: interaction.user.id };
 
-		await player.connect(voice.channelId, { deafened: true }).play(track);
-		queue.tracks.push(track.info);
+		switch (res.loadType) {
+			case LoadType.LoadFailed:
+			case LoadType.NoMatches: {
+				await interaction.editReply({ content: 'Lookup failed, try again.' });
+				return;
+			}
 
-		await interaction.editReply(`now playing: ${res.tracks[0]?.info.title}`);
+			case LoadType.PlaylistLoaded:
+				{
+					let count = 0;
+					for (const track of res.tracks) {
+						queue.tracks.push(Object.assign(track, requestedBy));
+						count += 1;
+					}
+
+					await interaction.editReply(`Loaded playlist ${res.playlistInfo.name} with ${count} tracks.`);
+				}
+
+				break;
+			default: {
+				const track = res.tracks[0]!;
+				queue.tracks.push(Object.assign(track, requestedBy));
+			}
+		}
+
+		await play(interaction.guildId, {
+			textChannelId: interaction.channelId,
+			voiceChannelId: voice.channelId,
+		});
+		await interaction.deleteReply();
 	}
 }
