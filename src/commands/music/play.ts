@@ -57,7 +57,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 
 		await play(interaction.guildId, {
 			textChannelId: interaction.channelId,
-			voiceChannelId: voice.channelId,
+			voiceChannelId: voice.channelId!,
 		});
 		await interaction.deleteReply();
 	}
