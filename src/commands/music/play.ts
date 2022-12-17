@@ -31,9 +31,13 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 		const requestedBy = { requestedBy: interaction.user.id };
 
 		switch (res.loadType) {
-			case LoadType.LoadFailed:
-			case LoadType.NoMatches: {
+			case LoadType.LoadFailed: {
 				await interaction.editReply({ content: 'Lookup failed, try again.' });
+				return;
+			}
+
+			case LoadType.NoMatches: {
+				await interaction.editReply({ content: 'No matches found, try a different query.' });
 				return;
 			}
 
