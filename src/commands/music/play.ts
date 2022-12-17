@@ -6,6 +6,7 @@ import { injectable, inject } from 'tsyringe';
 import { kManager } from '../../tokens.js';
 import { create } from '#functions/create.js';
 import { play } from '#functions/play.js';
+import { inVoiceChannel } from '#preconditions/inVoiceChannel.js';
 import type { Command } from '#struct/Command';
 
 @injectable()
@@ -17,8 +18,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 
 		const { channelId, guildId } = interaction;
 		const { voice } = interaction.member;
-
-		if (!voice.channelId) {
+		if (!inVoiceChannel(voice)) {
 			await interaction.editReply({ content: 'Join a voice channel first.' });
 			return;
 		}
