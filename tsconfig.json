@@ -23,7 +23,8 @@
 		"paths": {
 			"#struct/*": ["./src/struct/*"],
 			"#util/*": ["./src/util/*"],
-			"#functions/*": ["./src/functions/*"]
+			"#functions/*": ["./src/functions/*"],
+			"#preconditions/*": ["./src/functions/preconditions/*"]
 		}
 	},
 	"include": ["./src/**/*.ts"],

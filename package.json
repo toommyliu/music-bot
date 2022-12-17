@@ -19,7 +19,8 @@
 	"imports": {
 		"#struct/*": "./dist/struct/*",
 		"#util/*": "./dist/util/*",
-		"#functions/*": "./dist/functions/*"
+		"#functions/*": "./dist/functions/*",
+		"#preconditions/*": "./dist/functions/preconditions/*"
 	},
 	"dependencies": {
 		"@prisma/client": "^4.6.0",

@@ -2,6 +2,7 @@ import type { ApplicationCommandType, ChatInputCommandInteraction } from 'discor
 import { Node } from 'lavaclient';
 import { injectable, inject } from 'tsyringe';
 import { kManager } from '../../tokens.js';
+import { inVoiceChannel } from '#preconditions/inVoiceChannel.js';
 import type { Command } from '#struct/Command';
 
 @injectable()
@@ -28,8 +29,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 		}
 
 		const { voice } = interaction.member;
-
-		if (!voice.channelId) {
+		if (!inVoiceChannel(voice)) {
 			await interaction.editReply({ content: 'Join a voice channel first.' });
 			return;
 		}
