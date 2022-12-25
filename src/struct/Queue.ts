@@ -13,6 +13,10 @@ export class Queue {
 
 	public textChannelId: string;
 
+	public currentTrack: Track | undefined;
+
+	public lastTrack: Track | undefined;
+
 	public constructor(guildId: string, textChannelId: string, voiceChannelId: string) {
 		this.tracks = [];
 
@@ -23,6 +27,10 @@ export class Queue {
 
 	public get player() {
 		return container.resolve<Node>(kManager).players.get(this.guildId);
+	}
+
+	public clear() {
+		this.tracks = [];
 	}
 }
 

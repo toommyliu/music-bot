@@ -16,15 +16,17 @@ export async function play(guildId: string, playerInfo?: PlayerInfo) {
 		const player = node.players.get(guildId) ?? node.createPlayer(guildId);
 
 		if (!player.playing && playerInfo) {
+			const currentTrack = queue.tracks[0]!;
+			queue.currentTrack = currentTrack;
+
 			player.connect(playerInfo.voiceChannelId, { deafened: true });
-			await player.play(queue.tracks[0]!);
+			await player.play(currentTrack);
 
 			player.on('trackStart', async () => {
 				const channel = client.channels.cache.get(queue.textChannelId);
 				if (channel?.isTextBased()) {
 					if (cache.has(guildId)) {
 						if (!queue.tracks.length) {
-							console.log('no more tracks in queue');
 							return;
 						}
 
@@ -35,32 +37,22 @@ export async function play(guildId: string, playerInfo?: PlayerInfo) {
 						return;
 					}
 
-					const msg = await channel?.send(`Now playing: ${queue.tracks[0]?.info.title ?? 'Unknown track'} [1]`);
+					const msg = await channel?.send(`Now playing: ${queue.tracks[0]?.info.title ?? 'Unknown track'}`);
 					cache.set(guildId, msg.id);
 				}
 			});
 
-			player.on('trackEnd', async () => {
-				const channel = client.channels.cache.get(queue.textChannelId);
-				if (channel?.isTextBased()) {
-					if (cache.has(guildId)) {
-						queue.tracks.pop();
+			player.on('trackEnd', async (_, reason) => {
+				const queue = get(guildId)!;
+				queue.lastTrack = queue.tracks.shift();
 
-						if (!queue.tracks.length) {
-							console.log('no more tracks in queue [2]');
-							return;
-						}
-
-						const id = cache.get(guildId);
-						void channel.messages.cache
-							.get(id!)
-							?.edit(`Now playing: ${queue.tracks[0]?.info.title ?? 'Unknown track'}`);
-						return;
-					}
-
-					const msg = await channel?.send(`Now playing: ${queue.tracks[0]?.info.title ?? 'Unknown track'} [2]`);
-					cache.set(guildId, msg.id);
+				if (queue.tracks.length <= 0) {
+					return;
 				}
+
+				const currentTrack = queue.tracks[0]!;
+				queue.currentTrack = currentTrack;
+				await player.play(currentTrack);
 			});
 		}
 	}

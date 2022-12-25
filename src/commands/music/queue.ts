@@ -1,11 +1,13 @@
 import type { ApplicationCommandType, ChatInputCommandInteraction } from 'discord.js';
-import { hyperlink, userMention } from 'discord.js';
+import { hyperlink, inlineCode } from 'discord.js';
 import { injectable, inject } from 'tsyringe';
 import { kQueue } from '../../tokens.js';
 import type { Command } from '#struct/Command';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { QueueMap } from '#struct/Queue.js';
 import { createEmbed } from '#util/createEmbed.js';
+
+const MAX = 10;
 
 @injectable()
 export default class implements Command<ApplicationCommandType.ChatInput> {
@@ -14,6 +16,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 	public async handle(interaction: ChatInputCommandInteraction<'cached'>) {
 		await interaction.deferReply();
 
+		let page = interaction.options.getInteger('page', false) ?? 0;
 		const queue = this.queues.get(interaction.guildId);
 
 		if (!queue?.tracks.length || !queue.player?.connected) {
@@ -21,22 +24,34 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			return;
 		}
 
+		const maxPage = Math.ceil(queue.tracks.length / MAX);
+		if (page > maxPage || page < 1) {
+			page = 1;
+		}
+
+		const tracks = queue.tracks.slice(1).slice((page - 1) * MAX, page * MAX);
+
 		const embed = createEmbed({
 			title: `${interaction.guild!.name} Queue`,
-			description: `Now playing: ${hyperlink(
-				queue.tracks[0]?.info.title ?? 'Unknown track',
-				queue.tracks[0]?.info.uri ?? '',
-			)}\n\n`,
+			description: `
+			Now playing: ${hyperlink(queue.tracks[0]!.info.title, queue.tracks[0]!.info.uri)}
+
+			Up next:
+			${tracks
+				.map(
+					(track, index) =>
+						`${inlineCode(
+							Number(index + 1)
+								.toString()
+								// .padStart(2, (Math.floor((page * MAX) / 10) - 1).toString()),
+								.padStart(2, '0'),
+						)} ${hyperlink(track.info.title, track.info.uri)}`,
+				)
+				.join('\n')}`,
+			footer: {
+				text: `Page ${page}/${maxPage}`,
+			},
 		});
-
-		for (let idx = 1; idx < queue.tracks.length; idx++) {
-			const track = queue.tracks[idx];
-
-			embed!.description += `${(idx + 1).toString().padStart(queue.tracks.length, '0')}. ${hyperlink(
-				track?.info.title ?? 'Unknown track',
-				track?.info.uri ?? '',
-			)} ${userMention(track!.requestedBy)}\n`;
-		}
 
 		await interaction.editReply({ embeds: [embed] });
 	}
