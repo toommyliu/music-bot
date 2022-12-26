@@ -63,6 +63,5 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			textChannelId: interaction.channelId,
 			voiceChannelId: voice.channelId!,
 		});
-		await interaction.deleteReply();
 	}
 }
