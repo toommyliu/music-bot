@@ -40,12 +40,10 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			${tracks
 				.map(
 					(track, index) =>
-						`${inlineCode(
-							Number(index + 1)
-								.toString()
-								// .padStart(2, (Math.floor((page * MAX) / 10) - 1).toString()),
-								.padStart(2, '0'),
-						)} ${hyperlink(track.info.title, track.info.uri)}`,
+						`${inlineCode(Number((page - 1) * MAX + index + 1).toString())} ${hyperlink(
+							track.info.title,
+							track.info.uri,
+						)}`,
 				)
 				.join('\n')}`,
 			footer: {
