@@ -17,19 +17,19 @@
 		"#functions/*": "./dist/functions/*.js"
 	},
 	"dependencies": {
-		"@prisma/client": "^4.6.0",
-		"discord-api-types": "^0.37.17",
-		"discord.js": "^14.6.0",
+		"@prisma/client": "^4.8.1",
+		"discord-api-types": "^0.37.28",
+		"discord.js": "^14.7.1",
 		"lavaclient": "^4.1.1",
-		"pino": "^8.7.0",
+		"pino": "^8.8.0",
 		"readdirp": "^3.6.0",
 		"reflect-metadata": "^0.1.13",
-		"tslib": "^2.4.0",
+		"tslib": "^2.4.1",
 		"tsyringe": "^4.7.0"
 	},
 	"devDependencies": {
-		"@types/node": "^16.18.2",
-		"prisma": "^4.6.0",
-		"typescript": "^4.8.4"
+		"@types/node": "^18.11.18",
+		"prisma": "^4.8.1",
+		"typescript": "^4.9.4"
 	}
 }
