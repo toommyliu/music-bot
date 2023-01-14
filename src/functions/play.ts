@@ -26,9 +26,7 @@ export async function play(guildId: string, playerInfo?: PlayerInfo) {
 				const channel = client.channels.cache.get(queue.textChannelId);
 				if (channel?.isTextBased()) {
 					if (cache.has(guildId)) {
-						if (!queue.tracks.length) {
-							return;
-						}
+						if (!queue.tracks.length) return;
 
 						const id = cache.get(guildId);
 						void channel.messages.cache

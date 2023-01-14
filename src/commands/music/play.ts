@@ -6,8 +6,8 @@ import { injectable, inject } from 'tsyringe';
 import { kManager } from '../../tokens.js';
 import { create } from '#functions/create.js';
 import { play } from '#functions/play.js';
-import { inVoiceChannel } from '#preconditions/inVoiceChannel.js';
 import type { Command } from '#struct/Command';
+import { inVoiceChannel } from '#util/inVoiceChannel.js';
 
 @injectable()
 export default class implements Command<ApplicationCommandType.ChatInput> {
