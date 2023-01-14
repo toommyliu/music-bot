@@ -4,7 +4,7 @@ import process from 'node:process';
 import { fileURLToPath, URL } from 'node:url';
 import { REST, Routes } from 'discord.js';
 import readdirp from 'readdirp';
-import { logger } from '#util/logger.js';
+import { logger } from '#util/logger';
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 

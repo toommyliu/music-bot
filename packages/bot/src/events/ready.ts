@@ -5,7 +5,7 @@ import { Node } from 'lavaclient';
 import { injectable, inject } from 'tsyringe';
 import { kManager, kClient } from '../tokens.js';
 import type { Event } from '#struct/Event';
-import { logger } from '#util/logger.js';
+import { logger } from '#util/logger';
 
 @injectable()
 export default class implements Event<typeof Events.ClientReady> {

@@ -4,8 +4,8 @@ import { injectable, inject } from 'tsyringe';
 import { kQueue } from '../../tokens.js';
 import type { Command } from '#struct/Command';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { QueueMap } from '#struct/Queue.js';
-import { createEmbed } from '#util/createEmbed.js';
+import type { QueueMap } from '#struct/Queue';
+import { createEmbed } from '#util/createEmbed';
 
 const MAX = 10;
 
@@ -62,6 +62,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			${tracks
 				.map(
 					(track, index) =>
+						// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
 						`${inlineCode(Number((page - 1) * MAX + index + 1).toString())} ${hyperlink(
 							track.info.title,
 							track.info.uri,

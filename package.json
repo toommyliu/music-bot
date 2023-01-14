@@ -1,37 +1,20 @@
 {
-	"name": "typescript-template",
+	"name": "music-bot",
 	"packageManager": "yarn@3.2.1",
-	"main": "./dist/index.js",
-	"version": "0.0.1",
-	"type": "module",
+	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
 	"scripts": {
-		"lint": "eslint src --ext .ts && prettier --check --plugin-search-dir=. .",
-		"build": "swc ./src --out-dir ./dist",
+		"lint": "turbo run lint && prettier --check --plugin-search-dir=. .",
+		"build": "turbo run build",
 		"format": "prettier --write --plugin-search-dir=. .",
+		"prisma": "dotenv -e .env prisma",
+		"deploy-commands": "yarn build && dotenv -e .env -v -- node ./packages/bot/dist/deploy.js",
+		"start-bot": "dotenv -e .env -- node ./packages/bot/dist/index.js",
+		"start-api": "dotenv -e .env -- node ./packages/api/dist/index.js",
 		"prepare": "is-ci || husky install",
-		"update": "yarn upgrade-interactive",
-		"start-bot": "dotenv -e .env -- node ./dist/index.js",
-		"deploy-commands": "dotenv -e .env -- node ./dist/deploy.js"
-	},
-	"engines": {
-		"node": ">=16.9.0"
-	},
-	"imports": {
-		"#struct/*": "./dist/struct/*",
-		"#util/*": "./dist/util/*",
-		"#functions/*": "./dist/functions/*",
-		"#preconditions/*": "./dist/functions/preconditions/*"
-	},
-	"dependencies": {
-		"@prisma/client": "^4.6.0",
-		"discord-api-types": "^0.37.17",
-		"discord.js": "^14.6.0",
-		"lavaclient": "^4.1.1",
-		"pino": "^8.7.0",
-		"readdirp": "^3.6.0",
-		"reflect-metadata": "^0.1.13",
-		"tslib": "^2.4.0",
-		"tsyringe": "^4.7.0"
+		"update": "yarn upgrade-interactive"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.1.2",
@@ -51,6 +34,7 @@
 		"prettier": "^2.7.1",
 		"prettier-eslint": "^15.0.1",
 		"prisma": "^4.6.0",
+		"turbo": "^1.7.0",
 		"typescript": "^4.8.4"
 	}
 }

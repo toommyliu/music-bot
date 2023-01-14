@@ -4,10 +4,10 @@ import type { ApplicationCommandType, ChatInputCommandInteraction } from 'discor
 import { Node } from 'lavaclient';
 import { injectable, inject } from 'tsyringe';
 import { kManager } from '../../tokens.js';
-import { create } from '#functions/create.js';
-import { play } from '#functions/play.js';
+import { create } from '#functions/create';
+import { play } from '#functions/play';
 import type { Command } from '#struct/Command';
-import { inVoiceChannel } from '#util/inVoiceChannel.js';
+import { inVoiceChannel } from '#util/inVoiceChannel';
 
 @injectable()
 export default class implements Command<ApplicationCommandType.ChatInput> {

@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { kQueue } from '../../tokens.js';
 import type { Command } from '#struct/Command';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { QueueMap } from '#struct/Queue.js';
+import type { QueueMap } from '#struct/Queue';
 
 @injectable()
 export default class implements Command<ApplicationCommandType.ChatInput> {

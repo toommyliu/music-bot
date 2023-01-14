@@ -3,7 +3,7 @@ import { Node } from 'lavaclient';
 import { injectable, inject } from 'tsyringe';
 import { kManager } from '../../tokens.js';
 import type { Command } from '#struct/Command';
-import { inVoiceChannel } from '#util/inVoiceChannel.js';
+import { inVoiceChannel } from '#util/inVoiceChannel';
 
 @injectable()
 export default class implements Command<ApplicationCommandType.ChatInput> {
@@ -19,7 +19,7 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 		}
 
 		const player = this.node.players.get(interaction.guildId);
-		if (!player) {
+		if (!player?.playing) {
 			await interaction.editReply({ content: 'Not playing anything.' });
 			return;
 		}
@@ -29,7 +29,12 @@ export default class implements Command<ApplicationCommandType.ChatInput> {
 			return;
 		}
 
-		await player.stop();
-		await interaction.editReply({ content: 'Skipped the current track.' });
+		if (player.paused) {
+			await interaction.editReply({ content: 'Already paused.' });
+			return;
+		}
+
+		await player.pause(true);
+		await interaction.editReply({ content: 'Paused music playback.' });
 	}
 }

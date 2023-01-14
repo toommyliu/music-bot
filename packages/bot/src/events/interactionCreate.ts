@@ -4,7 +4,7 @@ import { injectable, inject } from 'tsyringe';
 import { kCommands, kClient } from '../tokens.js';
 import type { Command } from '#struct/Command';
 import type { Event } from '#struct/Event';
-import { logger } from '#util/logger.js';
+import { logger } from '#util/logger';
 
 @injectable()
 export default class implements Event<typeof Events.InteractionCreate> {

@@ -6,10 +6,10 @@ import { Client, GatewayIntentBits } from 'discord.js';
 import { Node } from 'lavaclient';
 import readdirp from 'readdirp';
 import { container, type InjectionToken } from 'tsyringe';
-import { type Command, commandInfo } from './struct/Command.js';
-import { type Event, eventInfo } from './struct/Event.js';
 import { kClient, kCommands, kManager, kQueue } from './tokens.js';
-import { logger } from '#util/logger.js';
+import { type Command, commandInfo } from '#struct/Command';
+import { type Event, eventInfo } from '#struct/Event';
+import { logger } from '#util/logger';
 
 const client = new Client({
 	intents: GatewayIntentBits.Guilds | GatewayIntentBits.GuildVoiceStates,
